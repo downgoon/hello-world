@@ -7,3 +7,5 @@ You’ll learn how to:
 * Start and manage a new branch
 * Make changes to a file and push them to GitHub as commits
 * Open and merge a pull request
+
+---
