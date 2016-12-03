@@ -30,7 +30,7 @@ specify log file: ``bin/mongod  --dbpath=~/mongodb-data/ --port 27017 --logpath=
 
 specify some modes: ``bin/mongod  --dbpath=~/mongodb-data/ --port 27017 --logpath=~/mongodb.log --logappend --logappend``
   
-** NOTE **
+**NOTE**
 
 mongodb-3.x is quite different from mongodb-2.x
 
