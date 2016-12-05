@@ -204,6 +204,7 @@ support-files/mysql.server: POSIX shell script text executable
 
 ### 访问
 
+在 mysqld 本地机器上执行：
 ```
 # cd /var/wd/mysql-5.5.52-linux2.6-x86_64
 # bin/mysql
@@ -234,7 +235,45 @@ mysql> show databases;
 
 在 *mysqld* 所在的机器，执行 *mysql*  无需密码，即可登录。 ``mysql -h localhost -P 3306 -u root -p``, 提示输入密码时候，直接回车（无需密码）就可以进入。但是为了保护数据库信息安全，root@localhost只能从本机访问，无法从远程客户端访问的。
 
-还可以用 *sock* 方式访问：
+为了外网访问，新建一个账号``devacc``，密码为``swl123``，允许从任何源主机访问。
+
+```
+# mysql -h localhost -u root -p
+Enter password:  （直接回车，无需密码）
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+
+mysql> grant all privileges on *.* to devacc@'%' identified by 'swl123';
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> show grants for devacc;
++----------------------------------------------------------------------------------------------------------------+
+| Grants for devacc@%                                                                                            |
++----------------------------------------------------------------------------------------------------------------+
+| GRANT ALL PRIVILEGES ON *.* TO 'devacc'@'%' IDENTIFIED BY PASSWORD '*2F2E4079A9226AEF10B1C665B3DE101EB380D03F' |
++----------------------------------------------------------------------------------------------------------------+
+1 row in set (0.00 sec)
+```
+
+文中授权命令 ``grant all privileges on *.* to devacc@'%' identified by 'swl123';`` 表示授予账户来自``%``（符号%表示任意源IP）的``devacc``用密码``swl123``，的所有权限（all privileges）。``grant``命令，**对于不存在的用户，会自动创建**。
+
+另外，通过``grant``命令，创建用户并授权的，并不需要执行``flush privileges;``就可以生效。只有``insert into mysql.user(Host,User,Password) values("%","devacc",password("swl123"));``方式添加用户并授权的才需要``flush privileges;``。
+
+从远程登录：
+```
+~ mysql -h 10.213.57.166 -P 10006 -u devacc -pswl123
+
+mysql>
+```
+
+**附言**
+
+- 重置密码
+```
+mysql> SET PASSWORD FOR 'devacc'@'%' = PASSWORD("123swl");
+Query OK, 0 rows affected (0.00 sec)
+```
+
+当然本地还可以用 *sock* 方式访问：
 
 ```
 # mysql --socket=/tmp/mysql.sock
@@ -306,6 +345,10 @@ scripts/mysql_install_db --user=mysql --basedir=./ --datadir=./data
 ```
 bin/mysqld_safe --defaults-file=support-files/my-medium.cnf &
 ```
+- 授权外网访问（包含创建用户和授权，无需flush）
+```
+grant all privileges on *.* to devacc@'%' identified by 'swl123';
+```
 - 停止
 ```
 bin/mysqladmin  --socket=/tmp/mysql.sock shutdown
@@ -330,4 +373,3 @@ mysqld]# tail -3f data/*.err
 ```
 
 ---
-
