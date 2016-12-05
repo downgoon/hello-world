@@ -232,7 +232,7 @@ mysql> show databases;
 ```
 
 
-在 *mysqld* 所在的机器，执行 *mysql*  无需密码，即可登录。
+在 *mysqld* 所在的机器，执行 *mysql*  无需密码，即可登录。 ``mysql -h localhost -P 3306 -u root -p``, 提示输入密码时候，直接回车（无需密码）就可以进入。但是为了保护数据库信息安全，root@localhost只能从本机访问，无法从远程客户端访问的。
 
 还可以用 *sock* 方式访问：
 
