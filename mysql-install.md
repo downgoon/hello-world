@@ -310,5 +310,24 @@ bin/mysqld_safe --defaults-file=support-files/my-medium.cnf &
 ```
 bin/mysqladmin  --socket=/tmp/mysql.sock shutdown
 ```
+
+**注意事项**
+
+1. 如果创建一个软链指向安装目录，即便对软链也执行``chown -R mysql:mysql mysqld`` （其中mysqld是软链），通过软链进入并如下执行：
+
+```
+lrwxrwxrwx  1 mysql mysql    36 Dec  5 16:39 mysqld -> /var/wd/mysql-5.5.52-linux2.6-x86_64
+$ cd mysqld
+$ bin/mysqld_safe --defaults-file=support-files/my-medium.cnf &
+```
+居然会报生成PID文件时候，没有权限。
+
+```
+mysqld]# tail -3f data/*.err
+161205 17:00:20 [ERROR] /root/mysqld/bin/mysqld: Can't create/write to file '/root/mysqld/data/CDCS-213057166.pid' (Errcode: 13)
+161205 17:00:20 [ERROR] Can't start server: can't create PID file: Permission denied
+161205 17:00:20 mysqld_safe mysqld from pid file /root/mysqld/data/CDCS-213057166.pid ended
+```
+
 ---
 
