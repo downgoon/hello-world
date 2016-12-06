@@ -1,11 +1,15 @@
-# hello-world
-hello-world from official tutorial
+# hello-world for bash
 
-You’ll learn how to:
+## how to get the path of currently executing program
 
-* Create and use a repository
-* Start and manage a new branch
-* Make changes to a file and push them to GitHub as commits
-* Open and merge a pull request
+``` bash
+echo 'self-name: '$0
+echo "self-path: "$(cd `dirname $0`; pwd)
+echo "curr-path: "$(pwd)
+```
+which one is the right ?
 
+the second: ``echo "self-path: "$(cd `dirname $0`; pwd)``
+
+![the path of currently executing program](https://cloud.githubusercontent.com/assets/23731186/20923692/b053f34e-bbe8-11e6-99fc-8544c35040dc.png)
 ---
