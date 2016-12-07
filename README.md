@@ -1,11 +1,7 @@
-# hello-world
-hello-world from official tutorial
+# hello-world for github
 
 You’ll learn how to:
 
-* Create and use a repository
-* Start and manage a new branch
-* Make changes to a file and push them to GitHub as commits
-* Open and merge a pull request
+* .gitignore settings on github/gitignore.md
 
 ---
