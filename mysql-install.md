@@ -265,7 +265,7 @@ mysql> show grants for devacc;
 mysql>
 ```
 
-**WARNING（注意！注意！注意！）
+**WARNING**（注意！注意！注意！）
 
 >在有些版本中，比如mysql 5.5，授权的主机通配符%，并不包含localhost，而且如果localhost配置了hostname，授权localhost或127.0.0.1都无济于事，必须授权到hostname。
 
