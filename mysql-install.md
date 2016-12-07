@@ -265,6 +265,54 @@ mysql> show grants for devacc;
 mysql>
 ```
 
+**WARNING（注意！注意！注意！）
+
+>在有些版本中，比如mysql 5.5，授权的主机通配符%，并不包含localhost，而且如果localhost配置了hostname，授权localhost或127.0.0.1都无济于事，必须授权到hostname。
+
+从 ``10.213.57.166``访问：
+
+```
+[root@CDCS-213057166 ~]# mysql -h 10.213.57.166 -P 10006 -u devacc -p123swl passport
+ERROR 1045 (28000): Access denied for user 'devacc'@'CDCS-213057166' (using password: YES)
+```
+
+提示未授权的账户是``'devacc'@'CDCS-213057166'``，即便对localhost 授权，也都无济于事。
+
+```
+grant select,delete,update,create on passport.* to devacc@"localhost" identified by "123swl";
+grant select,delete,update,create on passport.* to devacc@"127.0.0.1" identified by "123swl";
+flush privileges;
+```
+
+依然无法访问，直到针对hostname授权：
+
+```
+grant select,delete,update,create on passport.* to devacc@"CDCS-213057166" identified by "123swl";
+```
+前面说过``grant``命令并不需要``flush privileges;``就能生效。
+```
+[root@CDCS-213057166 ~]# mysql -h 10.213.57.166 -P 10006 -u devacc -p123swl passport
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 40500
+```
+在服务端可以看到ID=40500的Connection
+
+```
+mysql> show processlist;
++-------+--------+----------------------+----------+---------+------+-------+------------------+
+| Id    | User   | Host                 | db       | Command | Time | State | Info             |
++-------+--------+----------------------+----------+---------+------+-------+------------------+
+| 39435 | root   | localhost            | passport | Query   |    0 | NULL  | show processlist |
+| 40500 | devacc | CDCS-213057166:54677 | passport | Sleep   |  662 |       | NULL             |
+| 40501 | devacc | CDCS-213057166:54712 | passport | Sleep   |  599 |       | NULL             |
+| 40502 | devacc | CDCS-213057166:54713 | passport | Sleep   |  599 |       | NULL             |
+| 40503 | devacc | CDCS-213057166:54715 | passport | Sleep   |  599 |       | NULL             |
+| 40504 | devacc | CDCS-213057166:54716 | passport | Sleep   |  599 |       | NULL             |
+| 40505 | devacc | CDCS-213057166:54717 | passport | Sleep   |  581 |       | NULL             |
++-------+--------+----------------------+----------+---------+------+-------+------------------+
+7 rows in set (0.00 sec)
+```
+
 **附言**
 
 - 重置密码
