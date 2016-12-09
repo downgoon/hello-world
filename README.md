@@ -22,6 +22,8 @@ it's so easy to install mongodb on linux due to `Green Software`. only 3 steps: 
 
 a simple way to start:  ``bin/mongod``
 
+**NOTE: **  to run in background, execute ``bin/mongod &`` 
+
 specify datapath (used to store data):  ``bin/mongod --dbpath ~/mongod-data``
 
 specify listening port: ``bin/mongod  --dbpath=~/mongodb-data/ --port 27017``
