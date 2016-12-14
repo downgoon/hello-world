@@ -21,3 +21,10 @@ appname=`echo $apppath | awk -F "/" '{print $NF}'`
 echo $appname
 ```
 ---
+
+
+## how to rm .svn in mac
+
+``` bash
+find . -name ".svn" -type d -exec rm -rf {} +
+```
