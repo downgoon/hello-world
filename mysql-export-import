@@ -1,0 +1,42 @@
+# export
+
+## mysqldump
+
+执行：
+
+- 包含表结构+数据
+```
+mysqldump -h 10.213.57.166 -P 10006 -u devacc -p123swl passport > passport.sql
+```
+
+- 只含表结构，携带参数：``--no-data`` 或 ``-d``
+
+```
+mysqldump -h 10.213.57.166 -P 10006 -u devacc -p123swl passport --no-data > passport.sql
+```
+
+- 只含数据，携带参数: ``--no-create-info`` 或 ``-t``
+
+```
+mysqldump -h 10.213.57.166 -P 10006 -u devacc -p123swl passport --no-create-info > passport.sql
+```
+
+注意：
+- 可以在服务端执行，也可以在客户端执行。
+
+---
+
+# import
+
+## source
+
+```
+mysql -h 10.213.57.166 -P 10006 -u devacc -p123swl passport
+mysql > source /path/to/passport.sql
+```
+
+或
+
+```
+mysql -h 10.213.57.166 -P 10006 -u devacc -p123swl passport < /path/to/passport.sql
+```
