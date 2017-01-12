@@ -3,27 +3,33 @@ package io.downgoon.hello.spring.redis;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 public class RedisHello {
 
 	private static final Logger LOG = LoggerFactory.getLogger(RedisHello.class);
-	
+
 	public static void main(String[] args) {
 		JedisConnectionFactory factory = new JedisConnectionFactory();
+		factory.setHostName("localhost");
+		factory.setPort(6379);
 		factory.afterPropertiesSet();
-		
-		
-		StringRedisTemplate template = new StringRedisTemplate();
-        template.setConnectionFactory(factory);
-        template.afterPropertiesSet();
 
-        
-        template.opsForValue().set("name", "downgoon");
+		RedisTemplate<String, Employee> template = new RedisTemplate<String, Employee>();
+		template.setConnectionFactory(factory);
 
-        String name = template.opsForValue().get("name");
-        
-        LOG.info("name: {}", name);
+		template.setKeySerializer(new StringRedisSerializer());
+		template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+
+		template.afterPropertiesSet();
+
+		template.opsForValue().set("name", new Employee("downgoon", 18));
+
+		Employee employee = template.opsForValue().get("name");
+
+		LOG.info("employee: {}", employee);
 	}
 
 }
