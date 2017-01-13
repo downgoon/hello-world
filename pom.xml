@@ -4,32 +4,34 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>io.downgoon.hello</groupId>
-	<artifactId>hello-spring-redis</artifactId>
+	<artifactId>hello-json</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
-	<name>hello-spring-redis</name>
-
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.3.3.RELEASE</version>
-	</parent>
+	<name>hello-json</name>
 
 	<dependencies>
 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-redis</artifactId>
-		</dependency>
-
+		<!-- jackson2 recommended by spring -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-core</artifactId>
+			<version>2.8.5</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
+			<version>2.8.5</version>
 		</dependency>
+
+
+		<!-- json-lib (an out-of-date tech) -->
+		<dependency>
+			<groupId>net.sf.json-lib</groupId>
+			<artifactId>json-lib</artifactId>
+			<version>2.4</version>
+			<classifier>jdk15</classifier>
+		</dependency>
+
 	</dependencies>
-	
+
 </project>
