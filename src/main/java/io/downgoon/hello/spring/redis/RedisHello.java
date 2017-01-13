@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 public class RedisHello {
@@ -21,7 +21,9 @@ public class RedisHello {
 		template.setConnectionFactory(factory);
 
 		template.setKeySerializer(new StringRedisSerializer());
-		template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+		// template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+		
+		template.setValueSerializer(new Jackson2JsonRedisSerializer<Employee>(Employee.class));
 
 		template.afterPropertiesSet();
 
