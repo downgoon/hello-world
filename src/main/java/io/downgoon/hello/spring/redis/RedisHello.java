@@ -2,10 +2,15 @@ package io.downgoon.hello.spring.redis;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.cache.RedisCache;
+import org.springframework.data.redis.cache.RedisCacheElement;
+import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+
+import redis.clients.jedis.JedisPoolConfig;
 
 public class RedisHello {
 
@@ -15,23 +20,31 @@ public class RedisHello {
 		JedisConnectionFactory factory = new JedisConnectionFactory();
 		factory.setHostName("localhost");
 		factory.setPort(6379);
+		factory.setPoolConfig(new JedisPoolConfig()); // 
 		factory.afterPropertiesSet();
 
-		RedisTemplate<String, Employee> template = new RedisTemplate<String, Employee>();
-		template.setConnectionFactory(factory);
+		RedisTemplate<String, Employee> redisTemplate = new RedisTemplate<String, Employee>();
+		redisTemplate.setConnectionFactory(factory);
 
-		template.setKeySerializer(new StringRedisSerializer());
-		// template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
+		redisTemplate.setKeySerializer(new StringRedisSerializer());
+		redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
 		
-		template.setValueSerializer(new Jackson2JsonRedisSerializer<Employee>(Employee.class));
+		redisTemplate.afterPropertiesSet();
 
-		template.afterPropertiesSet();
-
-		template.opsForValue().set("name", new Employee("downgoon", 18));
-
-		Employee employee = template.opsForValue().get("name");
-
-		LOG.info("employee: {}", employee);
+		RedisCacheManager redisCacheManager = new RedisCacheManager(redisTemplate);
+		redisCacheManager.setUsePrefix(true); // dafault 'false'
+		redisCacheManager.afterPropertiesSet();
+		
+		// RedisCache is sub-class of Cache
+		RedisCache redisCache = (RedisCache) redisCacheManager.getCache("session"); 
+		
+		redisCache.put("wangyi", "logined");
+		redisCache.put("employee", new Employee("liusan", 23));
+		
+		// RedisCacheElement is sub-class of ValueWrapper
+		RedisCacheElement valueWrapper = (RedisCacheElement) redisCache.get("wangyi");
+	
+		LOG.info("value: {}, ttl: {}", valueWrapper.get(), valueWrapper.getTimeToLive());
 	}
 
 }
