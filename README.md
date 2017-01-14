@@ -20,7 +20,7 @@
 
 # 使用步骤
 
-- **查看教程列表**：教程列表体现在 [分支列表](https://github.com/downgoon/hello-world/branches) 里。
+- **查看教程列表**：教程的文字稿在 [wiki](https://github.com/downgoon/hello-world/wiki) 里，对应代码在 [分支列表](https://github.com/downgoon/hello-world/branches) 里。
 - **选择学习分支**： 比如想学习 Spring 配置方面的，可选择 [spring-config分支](https://github.com/downgoon/hello-world/tree/spring-config)。
 
 克隆/拉取/下载``spring-config``分支到本地：
