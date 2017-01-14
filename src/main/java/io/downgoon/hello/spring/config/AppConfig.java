@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Bean;
 
 public class AppConfig {
 
-	@Bean
+	@Bean(name = "wangyi")
 	public Employee employee() {
 		Employee e = new Employee();
 		e.setName("wangyi");
@@ -12,5 +12,13 @@ public class AppConfig {
 		return e;
 	}
 	
+	
+	@Bean(name = "zhangsan")
+	public Employee employeeZhangsan() {
+		Employee e = new Employee();
+		e.setName("zhangsan");
+		e.setAge(37);
+		return e;
+	}
 
 }
