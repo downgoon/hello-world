@@ -15,6 +15,9 @@ public class AnnotationConfigExample {
         
         Employee chenliu = ctx.getBean("chenliu", Employee.class);
         System.out.println(chenliu);
+        
+        Employee env = ctx.getBean("env", Employee.class);
+        System.out.println(env);
 	}
 	
 }
