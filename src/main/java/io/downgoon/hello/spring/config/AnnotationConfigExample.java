@@ -12,6 +12,9 @@ public class AnnotationConfigExample {
         
         Employee zhangsan = ctx.getBean("zhangsan", Employee.class);
         System.out.println(zhangsan);
+        
+        Employee chenliu = ctx.getBean("chenliu", Employee.class);
+        System.out.println(chenliu);
 	}
 	
 }
