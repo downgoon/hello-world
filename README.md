@@ -25,6 +25,7 @@ echo $appname
 
 ## how to rm .svn in mac
 
+- 查询后执行命令
 ``` bash
 find . -name ".svn" -type d -exec rm -rf {} +
 ```
@@ -36,3 +37,13 @@ find . -name ".svn" -type d -exec rm -rf {} +
 find . -name "*.pac" -type f -maxdepth 1 -exec ls -l {} +
 find . -name "*.pac" -type f -maxdepth 1 -exec rm -rf {} +
 ```
+
+- 正则表达式
+
+``` bash 
+
+$ find . -regex './j.*\.pac' -maxdepth 1
+./jiagou.pac
+
+```
+
