@@ -28,3 +28,11 @@ echo $appname
 ``` bash
 find . -name ".svn" -type d -exec rm -rf {} +
 ```
+
+
+- 控制路径深度
+
+``` bash
+find . -name "*.pac" -type f -maxdepth 1 -exec ls -l {} +
+find . -name "*.pac" -type f -maxdepth 1 -exec rm -rf {} +
+```
