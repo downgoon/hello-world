@@ -46,4 +46,9 @@ $ find . -regex './j.*\.pac' -maxdepth 1
 ./jiagou.pac
 
 ```
+- 删除几天前
 
+``` bash
+#delete files modified min 20 ago
+/usr/bin/find /opt/rsync/liveimg/eden/ -maxdepth 1 -type f -regex '/opt/rsync/liveimg/eden/.*\.jpg' -mmin +20 -delete;
+```
