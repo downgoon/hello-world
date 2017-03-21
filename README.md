@@ -52,3 +52,15 @@ $ find . -regex './j.*\.pac' -maxdepth 1
 #delete files modified min 20 ago
 /usr/bin/find /opt/rsync/liveimg/eden/ -maxdepth 1 -type f -regex '/opt/rsync/liveimg/eden/.*\.jpg' -mmin +20 -delete;
 ```
+
+----
+
+## mac 默认shell
+
+```
+$ cat /etc/shells  # shell列表
+$ chsh -s /bin/zsh   #修改默认shell为zsh
+```
+
+upgrade bash to version 4.X on mac
+http://www.tuicool.com/articles/EjIrmmN
