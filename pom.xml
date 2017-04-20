@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>io.downgoon.hello</groupId>
-	<artifactId>hello-javastart</artifactId>
+	<artifactId>hello-vertxweb</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
@@ -15,6 +15,21 @@
 	</properties>
 
 	<dependencies>
+
+		<dependency>
+			<groupId>io.vertx</groupId>
+			<artifactId>vertx-web</artifactId>
+			<version>3.4.1</version>
+		</dependency>
+
+
+		<!-- 
+		<dependency>
+			<groupId>io.vertx</groupId>
+			<artifactId>vertx-core</artifactId>
+			<version>3.4.1</version>
+		</dependency>
+		 -->
 
 		<dependency>
 			<groupId>junit</groupId>
