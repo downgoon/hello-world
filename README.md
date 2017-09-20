@@ -36,6 +36,14 @@ $ git clone https://github.com/downgoon/hello-world.git
 $ git checkout -b spring-config origin/spring-config
 ```
 
+当然如果一开始只拉取了``master``，再拉取其他分支：
+
+```
+$ git clone https://github.com/downgoon/hello-world.git
+$ git fetch origin
+$ git checkout spring-config
+```
+
 - **选择知识点**： 每个知识点，是一次commit，或者还打了一个tag （github会对每个tag发布一次release，或许比较浪费github资源）。
 
 通过 commit log 查询知识点，并checkout 进入指定的点：
