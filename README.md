@@ -1,4 +1,4 @@
-# hello-world for shiro
+# QuickStart
 
 ## 简介
 
@@ -303,31 +303,134 @@ vip=videos:download
 
 ## HelloWorld 代码
 
-![](assets/img-shiro-flow.png)
+详细代码见 ``hello-world.git``的 ``shiro`` 分支的 ``HelloWorld.java``。
 
+### 配置文件
 
-## 术语解释
+一个名叫``hello-world.ini``的配置文件，放到classpath下：
 
-AuthenticationInfo
-AuthorizationInfo
+``` ini
+[users]
+zhangsan = zs1234, vip
 
-
-- 登陆令牌
-
-``` java
-UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+[roles]
+vip=videos:download,videos:upload,printer:print,query
 ```
 
-它属于``AuthenticationToken``的一种，用于证明“是谁”的问题。
+上述语义是：定义了一个``zhangsan``的用户，它的密码是``zs1234``，它的角色是vip；给vip角色赋予的权限是：视频下载；视频上传；打印机打印和打印机查询。其中``printer:print,query``表达形式，在官方文档叫 [multiple-values](http://shiro.apache.org/permissions.html#multiple-values)。它说的是``printer:print,query``表达式完全等效于``printer:print``和``printer:query``。
 
+### maven依赖
 
-- SecurityManager
+``` xml
+<dependency>
+			<groupId>org.apache.shiro</groupId>
+			<artifactId>shiro-core</artifactId>
+			<version>1.3.2</version>
+</dependency>
+```
+
+注意：完整需要依赖``slf4j``日志。
+
+### 入门代码
 
 ``` java
-SecurityUtils.setSecurityManager(securityManager); // 注入 SecurityManager
-Subject subject = SecurityUtils.getSubject(); // 获取Subject单例对象
-subject.login(token); // 登陆
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.config.IniSecurityManagerFactory;
+import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.subject.Subject;
+import org.apache.shiro.util.Factory;
+
+public class HelloWorld {
+
+	public static void main(String[] args) throws Exception {
+
+		// load configuration and create SecurityManager
+		Factory<SecurityManager> securityManagerFactory = new IniSecurityManagerFactory("classpath:hello-world.ini");
+		SecurityManager securityManager = securityManagerFactory.getInstance();
+		SecurityUtils.setSecurityManager(securityManager);
+
+		Subject subject = SecurityUtils.getSubject();
+
+		// login as vip Role
+
+		subject.login(new UsernamePasswordToken("zhangsan", "zs1234") );
+
+		// Role checking
+
+		if (subject.hasRole("vip")) {
+			System.out.println("has role vip");
+		} else {
+			System.out.println("no role vip");
+		}
+
+		// Permission checking
+
+		System.out.println(String.format("%s access %s: %s", subject.getPrincipal(), "videos:upload",
+				subject.isPermitted("videos:upload")));
+
+		System.out.println(String.format("%s access %s: %s", subject.getPrincipal(), "videos:download",
+				subject.isPermitted("videos:download")));
+
+		System.out.println(String.format("%s access %s: %s", subject.getPrincipal(), "videos:*",
+				subject.isPermitted("videos:*")));
+
+		System.out.println(String.format("%s access %s: %s", subject.getPrincipal(), "printer:print",
+				subject.isPermitted("printer:print")));
+		System.out.println(String.format("%s access %s: %s", subject.getPrincipal(), "printer:query",
+				subject.isPermitted("printer:query")));
+
+	}
+
+}
+
 ```
+
+代码主要是依据``classpath:hello-world.ini``配置文件，生成对应的``SecurityManager``，然后先登录，再鉴权，鉴权用了两种方式：一种是Role checking，另一种是 Permission checking方式。所有的鉴权操作，内部都会被委派给``SecurityManager``，程序员需要打交道的仅仅是``Subject``类。为了独立任何容器运行（比如Web容器），需要手动诸如``SecurityUtils.setSecurityManager(securityManager);``。
+
+代码运行结果：
+
+``` text
+has role vip
+zhangsan access videos:upload: true
+zhangsan access videos:download: true
+zhangsan access videos:*: false
+zhangsan access printer:print: true
+zhangsan access printer:query: false
+```
+
+### 惊现BUG?
+
+运行结果，显示居然没有``printer:query``权限。修改配置：
+
+``` ini
+[roles]
+vip=videos:download,videos:upload,printer:print,printer:query
+```
+
+就有权限了。``printer:print,printer:query`` **不** 等效于 ``printer:print,query``。
+尽管官方文档在 [permissions.html multiple-values](http://shiro.apache.org/permissions.html#multiple-values) 章节谈到相等。
+
+但是后来想想语法上其实会有歧义？比如：
+
+``` ini
+[roles]
+vip=videos:download,upload,printer:print,query
+```
+
+一种理解是``multiple-values``，断句是：``videos:download,upload`` 与 ``printer:print,query``。
+另一种理解是：``videos:download``，``upload``，``printer:print`` 和 ``query`` 。
+
+的的确确，当我们去验证:
+
+``` java
+subject.isPermitted("query");
+System.out.println(String.format("%s access %s: %s", subject.getPrincipal(), "query",
+				subject.isPermitted("query")));
+```
+
+输出的是：``true``。
+
 
 ## 参考资料
 
