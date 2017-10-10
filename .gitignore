@@ -2,6 +2,8 @@
 # don't forget share .gitignore located in project root path
 !.gitignore
 
+.settings/
+.classpath
 
 ######## programming lang  related ignore
 #######################################################################################################
