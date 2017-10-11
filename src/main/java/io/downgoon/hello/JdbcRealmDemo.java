@@ -18,66 +18,56 @@ public class JdbcRealmDemo {
 
 		System.out.println("Hello shiro!");
 
-		MysqlDataSource datasource = new MysqlDataSource();
-
-		datasource.setUser("root");
-
-		datasource.setPassword("123456");
-
-		datasource.setServerName("localhost");
-
+		// JDBC datasource
+		MysqlDataSource mysqlDataSource = new MysqlDataSource();
+		mysqlDataSource.setUser("root");
+		mysqlDataSource.setPassword("123456");
+		mysqlDataSource.setServerName("localhost");
+		mysqlDataSource.setUrl("jdbc:mysql://localhost:3306/jdbc-realm");
 		// datasource.setDriverClassName("com.mysql.jdbc.Driver");
-
-		datasource.setUrl("jdbc:mysql://localhost:3306/jdbc-realm");
-
 		// datasource.setMaxActive(10);
 
+		// JDBC realm
 		org.apache.shiro.realm.jdbc.JdbcRealm jdbcRealm = new JdbcRealm();
-
-		jdbcRealm.setDataSource(datasource);
-
+		jdbcRealm.setDataSource(mysqlDataSource);
 		jdbcRealm.setPermissionsLookupEnabled(true);
+		jdbcRealm.setAuthenticationQuery("SELECT PASSWORD FROM account WHERE name = ?");
+		jdbcRealm.setUserRolesQuery(
+				"SELECT NAME FROM role WHERE id =(SELECT roleId FROM account_role WHERE userId = (SELECT id FROM account WHERE NAME = ?))");
+		jdbcRealm.setPermissionsQuery(
+				"SELECT NAME FROM permission WHERE id in (SELECT permissionId FROM permission_role WHERE (SELECT id FROM role WHERE NAME = ?))");
 
-		jdbcRealm
-				.setAuthenticationQuery("SELECT PASSWORD FROM account WHERE name = ?");
+		// SecurityManager initiation
+		DefaultSecurityManager securityManager = new DefaultSecurityManager(jdbcRealm);
+		SecurityUtils.setSecurityManager(securityManager);
 
-		jdbcRealm
-				.setUserRolesQuery("SELECT NAME FROM role WHERE id =(SELECT roleId FROM account_role WHERE userId = (SELECT id FROM account WHERE NAME = ?))");
+		// authentication & authorization subject
+		Subject subject = SecurityUtils.getSubject();
 
-		jdbcRealm
-				.setPermissionsQuery("SELECT NAME FROM permission WHERE id in (SELECT permissionId FROM permission_role WHERE (SELECT id FROM role WHERE NAME = ?))");
+		/*--------------------------------------------
+		|               authentication               |
+		============================================*/
 
-		DefaultSecurityManager security = new DefaultSecurityManager(jdbcRealm);
+		if (!subject.isAuthenticated()) {
 
-		SecurityUtils.setSecurityManager(security);
-		Subject currentUser = SecurityUtils.getSubject();
-		
-		
-		if (!currentUser.isAuthenticated()) {
-
-			UsernamePasswordToken token = new UsernamePasswordToken("zhangsan",
-					"zs1234");
-
+			UsernamePasswordToken token = new UsernamePasswordToken("zhangsan", "zs1234");
 			token.setRememberMe(true);
 			try {
-				currentUser.login(token);
+				subject.login(token);
 
 				System.out.println("login successfully");
 
 			} catch (UnknownAccountException uae) {
 
-				System.out.println("There is no user with username of "
-						+ token.getPrincipal());
+				System.out.println("There is no user with username of " + token.getPrincipal());
 
 			} catch (IncorrectCredentialsException ice) {
 
-				System.out.println("Password for account "
-						+ token.getPrincipal() + " was incorrect!");
+				System.out.println("Password for account " + token.getPrincipal() + " was incorrect!");
 
 			} catch (LockedAccountException lae) {
 
-				System.out.println("The account for username "
-						+ token.getPrincipal() + " is locked.  " +
+				System.out.println("The account for username " + token.getPrincipal() + " is locked.  " +
 
 						"Please contact your administrator to unlock it.");
 
@@ -94,29 +84,25 @@ public class JdbcRealmDemo {
 
 		}
 
-		// say who they are:
 
-		// print their identifying principal (in this case, a username):
+		System.out.println("User [" + subject.getPrincipal() + "] logged in successfully.");
 
-		System.out.println("User [" + currentUser.getPrincipal()
-				+ "] logged in successfully.");
+		/*--------------------------------------------
+		|               authorization               |
+		============================================*/
 
 		// test a role:
 
-		if (currentUser.hasRole("admin")) {
-
-			System.out.println("May the admin be with you!");
-
+		if (subject.hasRole("admin")) {
+			System.out.println("hasRole: admin");
 		} else {
-
 			System.out.println("Hello, mere mortal.");
-
 		}
 
 		// test a typed permission (not instance-level)
 
-		if (currentUser.isPermitted("write")) {
-			System.out.println("You can write!.");
+		if (subject.isPermitted("write")) {
+			System.out.println("You can write!");
 		} else {
 
 			System.out.println("Sorry, lightsaber rings are for schwartz masters only.");
@@ -124,24 +110,15 @@ public class JdbcRealmDemo {
 
 		// a (very powerful) Instance Level permission:
 
-		if (currentUser.isPermitted("winnebago:drive:eagle5")) {
-
-			System.out
-					.println("You are permitted to 'drive' the winnebago with license plate (id) 'eagle5'.  "
-							+
-
-							"Here are the keys - have fun!");
+		if (subject.isPermitted("videos:download:demo")) {
+			System.out.println("PERMITTED:  videos:download:demo");
 
 		} else {
-
-			System.out
-					.println("Sorry, you aren't allowed to drive the 'eagle5' winnebago!");
-
+			System.out.println("NOT PERMITTED:  videos:download:demo");
 		}
 
 		// all done - log out!
-
-		currentUser.logout();
+		subject.logout();
 
 	}
 
