@@ -12,7 +12,7 @@ import org.apache.shiro.subject.Subject;
 
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
-public class JdbcReamTest {
+public class JdbcRealmDemo {
 
 	public static void main(String[] args) {
 
