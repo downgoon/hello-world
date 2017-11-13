@@ -78,3 +78,6 @@ $ git checkout spring-config-c4-confbyenc
 # 注意事项
 
 - git push 时，默认不会push tag，需要显式``git push --tags`` （等效于 ``git push origin --tags``），当然也可以只push某个tag，比如``git push origin spring-config-c4-confbyenc``。
+
+- 删除本地tag: ``git tag -d boxgate-0.1.0``
+- 删除远程tag: ``git push origin :refs/tags/boxgate-0.1.0``
