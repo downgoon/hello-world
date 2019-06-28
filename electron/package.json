@@ -1,0 +1,19 @@
+{
+  "name": "hello-electron",
+  "productName": "helloworld-electron",
+  "version": "0.1.0",
+  "description": "HelloWorld electron",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "package": "electron-packager . --overwrite --out=target  --icon=img/hello",
+    "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --out=target  --icon=img/hello.icns",
+    "package-win": "electron-packager . --overwrite --platform=win32 --arch=ia32 --out=target  --icon=img/hello.ico",
+    "package-linux": "electron-packager . --overwrite --platform=linux --arch=x64 --out=target  --icon=img/hello.png",
+    "installer-mac": "electron-installer-dmg ./target/helloworld-electron-darwin-x64/helloworld-electron.app helloworld-electron --out=./target --icon=img/hello.icns --overwrite --debug"
+  },
+  "devDependencies": {
+    "electron": "~1.6.2",
+    "electron-packager": "^8.7.1"
+  }
+}

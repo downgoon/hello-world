@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>jquery-electron-demo</title>
+
+<!-- Insert this line above script imports  -->
+<script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+
+<!-- normal script imports etc  -->
+<script type="text/javascript" src="js/jquery.js">
+</script>
+
+<!-- Insert this line after script imports -->
+<script>if (window.module) module = window.module;</script>
+
+
+  <script>
+  $(document).ready(function(){
+    $("p").click(function(){
+      $(this).hide();
+    });
+  });
+  </script>
+
+</head>
+<body>
+  <p>如果你点我，我就会消失。</p>
+  <p>继续点我!</p>
+  <p>接着点我!</p>
+</body>
+</html>
