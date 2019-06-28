@@ -1,0 +1,20 @@
+{
+    "type" : "jdbc",
+    "jdbc" : {
+        "url" : "jdbc:mysql://10.209.44.14:10044/passport",
+        "user" : "passport",
+        "password" : "passport",
+
+        "sql" : [ {
+            "statement" : "select a.id as _id, nick, headface, gender, mobile, email, emailchk, u.status as status, u.createtime as createtime from access a, user u where a.id = u.id"
+           } ],
+
+        "elasticsearch" : {
+             "cluster" : "elasticsearch",
+             "host" : "localhost",
+             "port" : 9300
+        },
+        "index" : "passport",
+        "type" : "user"
+    }
+}
