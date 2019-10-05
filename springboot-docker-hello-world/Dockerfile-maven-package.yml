@@ -1,0 +1,9 @@
+FROM maven:3.5.0-jdk-8-alpine
+
+MAINTAINER "downgoon@qq.com"
+
+WORKDIR /workspace
+ADD . /workspace
+
+RUN mvn clean package -Dmaven.test.skip=true
+CMD ["mvn"]

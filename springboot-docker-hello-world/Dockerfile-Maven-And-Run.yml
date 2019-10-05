@@ -1,0 +1,16 @@
+FROM maven:3.5.0-jdk-8-alpine
+
+MAINTAINER "downgoon@qq.com"
+
+WORKDIR /workspace
+ADD . /workspace
+
+RUN mvn clean package -Dmaven.test.skip=true
+
+# NO COPY COMMAND FOR ALIYUN.COM
+# https://cr.console.aliyun.com/repository/cn-beijing/downgoon/springboot-docker-hello-world/build
+
+# COPY /workspace/target/springboot-docker-hello-world-0.1.0.jar hello-world.jar
+# ENTRYPOINT java -jar hello-world.jar
+
+ENTRYPOINT java -jar target/springboot-docker-hello-world-0.1.0.jar

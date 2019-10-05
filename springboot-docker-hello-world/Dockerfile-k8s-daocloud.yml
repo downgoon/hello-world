@@ -1,0 +1,9 @@
+hello-world:
+  image: daocloud.io/downgoon/springboot-docker-hello-world:master-2b6dae9
+  privileged: false
+  restart: always
+  ports:
+  - 18080:8080
+  environment:
+  - APPVERSION=0.1.0
+  - APPNAME=springboot-docker-hello-world

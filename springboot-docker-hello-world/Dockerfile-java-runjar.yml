@@ -1,0 +1,9 @@
+FROM java
+
+MAINTAINER "downgoon@qq.com"
+
+COPY /workspace/target/springboot-docker-hello-world-0.1.0.jar /usr/src/myapp/hello-world.jar
+
+WORKDIR /usr/src/myapp/
+
+ENTRYPOINT java -jar hello-world.jar

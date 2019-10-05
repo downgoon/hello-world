@@ -1,0 +1,34 @@
+version: 3
+stages:
+- 源代码编译
+- 构建应用镜像
+docker build:
+  stage: 构建应用镜像
+  job_type: image_build
+  only:
+    branches:
+    - .*
+    tags:
+    - .*
+  allow_failure: false
+  build_dir: /
+  cache: true
+  dockerfile_path: daocloud.io/Dockerfile
+mvn package:
+  stage: 源代码编译
+  job_type: maven
+  only:
+    branches:
+    - .*
+    tags:
+    - .*
+  pull_request: false
+  allow_failure: false
+  context:
+    path: []
+  envs: []
+  image: maven:latest
+  name: mvn package
+  scripts:
+  - mvn clean package
+  services: []

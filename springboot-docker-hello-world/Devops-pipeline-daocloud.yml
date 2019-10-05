@@ -1,0 +1,22 @@
+version: 3
+stages:
+- 编译并运行
+安全构建先编后运:
+  stage: 编译并运行
+  job_type: lite_image_build
+  only:
+    branches:
+    - .*
+    tags:
+    - .*
+  allow_failure: false
+  compile:
+    build_dir: /
+    cache: true
+    dockerfile_path: /Dockerfile-maven-package.yml
+  extract:
+  - /workspace/target/springboot-docker-hello-world-0.1.0.jar
+  package:
+    build_dir: /
+    cache: true
+    dockerfile_path: /Dockerfile-java-runjar.yml
