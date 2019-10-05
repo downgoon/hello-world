@@ -13,7 +13,7 @@
     "installer-mac": "electron-installer-dmg ./target/helloworld-electron-darwin-x64/helloworld-electron.app helloworld-electron --out=./target --icon=img/hello.icns --overwrite --debug"
   },
   "devDependencies": {
-    "electron": "~1.6.2",
+    "electron": "~6.0.11",
     "electron-packager": "^8.7.1"
   }
 }
